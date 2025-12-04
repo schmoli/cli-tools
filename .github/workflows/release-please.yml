@@ -21,3 +21,47 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  build:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+          - os: ubuntu-latest
+            goos: linux
+            goarch: arm64
+          - os: macos-latest
+            goos: darwin
+            goarch: amd64
+          - os: macos-latest
+            goos: darwin
+            goarch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Build binaries
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          VERSION="${{ needs.release-please.outputs.tag_name }}"
+          LDFLAGS="-s -w -X main.version=${VERSION}"
+          go build -ldflags "${LDFLAGS}" -o portainer-cli ./portainer/cmd/portainer-cli
+          go build -ldflags "${LDFLAGS}" -o nproxy-cli ./nproxy/cmd/nproxy-cli
+          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          files: cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
