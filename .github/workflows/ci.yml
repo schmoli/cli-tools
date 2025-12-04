@@ -22,7 +22,46 @@ jobs:
       - name: Test nproxy-cli
         run: go test -v ./nproxy/...
 
-      - name: Build
+  build:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+          - os: ubuntu-latest
+            goos: linux
+            goarch: arm64
+          - os: macos-latest
+            goos: darwin
+            goarch: amd64
+          - os: macos-latest
+            goos: darwin
+            goarch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Build binaries
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
         run: |
-          go build -o bin/portainer-cli ./portainer/cmd/portainer-cli
-          go build -o bin/nproxy-cli ./nproxy/cmd/nproxy-cli
+          LDFLAGS="-s -w -X main.version=dev-${GITHUB_SHA::7}"
+          go build -ldflags "${LDFLAGS}" -o portainer-cli ./portainer/cmd/portainer-cli
+          go build -ldflags "${LDFLAGS}" -o nproxy-cli ./nproxy/cmd/nproxy-cli
+          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
+          retention-days: 30
