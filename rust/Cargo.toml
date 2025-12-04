@@ -1,0 +1,3 @@
+[workspace]
+members = ["portainer-lib", "portainer-cli"]
+resolver = "2"
