@@ -8,9 +8,8 @@ import (
 )
 
 var (
-	flagURL      string
-	flagToken    string
-	flagInsecure bool
+	flagURL   string
+	flagToken string
 )
 
 var rootCmd = &cobra.Command{
@@ -22,7 +21,6 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.PersistentFlags().StringVar(&flagURL, "url", "", "Portainer URL (or set PORTAINER_URL)")
 	rootCmd.PersistentFlags().StringVar(&flagToken, "token", "", "API token (or set PORTAINER_TOKEN)")
-	rootCmd.PersistentFlags().BoolVarP(&flagInsecure, "insecure", "k", false, "Skip TLS certificate verification")
 
 	rootCmd.AddCommand(stacksCmd)
 	rootCmd.AddCommand(endpointsCmd)
@@ -53,7 +51,7 @@ func getClient() (*portainer.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return portainer.NewClient(url, token, flagInsecure), nil
+	return portainer.NewClient(url, token), nil
 }
 
 func handleError(err error) {
