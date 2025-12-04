@@ -10,9 +10,9 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Go ===${NC}"
+echo -e "${BLUE}=== Go: portainer ===${NC}"
 echo "Testing..."
-cd go
+cd go/portainer
 GO_TEST_OUTPUT=$(go test ./... -v 2>&1)
 GO_TEST_EXIT=$?
 if [ $GO_TEST_EXIT -eq 0 ]; then
@@ -28,10 +28,10 @@ echo "Building..."
 go build -o portainer-cli ./cmd/portainer-cli
 GO_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
 echo -e "${GREEN}✓ Built${NC} (${GO_SIZE})"
-cd ..
+cd ../..
 
 echo ""
-echo -e "${BLUE}=== Rust ===${NC}"
+echo -e "${BLUE}=== Rust: portainer ===${NC}"
 echo "Testing..."
 cd rust
 RUST_TEST_OUTPUT=$(cargo test 2>&1)
@@ -46,14 +46,14 @@ else
 fi
 
 echo "Building..."
-cargo build --release 2>&1 | grep -E '(Compiling|Finished|error)' | tail -5
-cp target/release/portainer-cli .
-RUST_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
+cargo build --release -p portainer-cli 2>&1 | grep -E '(Compiling|Finished|error)' | tail -5
+cp target/release/portainer-cli portainer/
+RUST_SIZE=$(ls -lh portainer/portainer-cli | awk '{print $5}')
 echo -e "${GREEN}✓ Built${NC} (${RUST_SIZE})"
 cd ..
 
 echo ""
 echo -e "${BLUE}=== Summary ===${NC}"
-echo "  go/portainer-cli     ${GO_SIZE}"
-echo "  rust/portainer-cli   ${RUST_SIZE}"
+echo "  go/portainer/portainer-cli     ${GO_SIZE}"
+echo "  rust/portainer/portainer-cli   ${RUST_SIZE}"
 echo -e "${GREEN}Done.${NC}"

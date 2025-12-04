@@ -11,3 +11,4 @@ tasks/
 # Environment
 .env
 .env.*
+rust/target/

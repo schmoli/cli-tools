@@ -1,3 +1,7 @@
 [workspace]
-members = ["lib", "cli"]
+members = [
+    "common",
+    "portainer/lib",
+    "portainer/cli",
+]
 resolver = "2"

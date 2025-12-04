@@ -1,4 +1,4 @@
-module github.com/toli/portainer-cli
+module github.com/schmoli/cli-tools/go/portainer
 
 go 1.21
 
