@@ -11,4 +11,6 @@ tasks/
 # Environment
 .env
 .env.*
-rust/target/
+
+# Build artifacts
+bin/

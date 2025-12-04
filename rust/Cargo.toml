@@ -1,9 +1,0 @@
-[workspace]
-members = [
-    "common",
-    "nproxy/lib",
-    "nproxy/cli",
-    "portainer/lib",
-    "portainer/cli",
-]
-resolver = "2"

@@ -1,43 +1,25 @@
 # cli-tools
 
-Monorepo for CLI tools that fetch/transform data from various sources.
+CLI tools for various APIs.
 
 ## Structure
 
 ```
 cli-tools/
-├── go/
-│   ├── common/         # Shared Go code
-│   ├── nproxy/         # nproxy-cli
-│   └── portainer/      # portainer-cli
-└── rust/
-    ├── common/         # Shared Rust code
-    ├── nproxy/         # nproxy-cli
-    └── portainer/      # portainer-cli
+├── common/         # Shared Go code
+├── portainer/      # portainer-cli
+└── nproxy/         # nproxy-cli
 ```
 
 ## Tools
 
 ### portainer-cli
 
-CLI for Portainer API - backup and viewing operations.
-
-| Feature | Go | Rust |
-|---------|-----|------|
-| Binary size | ~9 MB | ~4 MB |
-| Shell completions | bash, zsh, fish, powershell | - |
-
-See [portainer documentation](docs/portainer.md) for usage details.
+CLI for Portainer API. See [docs/portainer.md](docs/portainer.md).
 
 ### nproxy-cli
 
-CLI for nginx-proxy-manager API - backup and viewing operations.
-
-| Feature | Go | Rust |
-|---------|-----|------|
-| Binary size | ~9 MB | ~4 MB |
-
-See [nproxy documentation](docs/nproxy.md) for usage details.
+CLI for nginx-proxy-manager API. See [docs/nproxy.md](docs/nproxy.md).
 
 ## Build
 
@@ -45,8 +27,4 @@ See [nproxy documentation](docs/nproxy.md) for usage details.
 ./build.sh
 ```
 
-Builds all tools. Binaries are created in each tool's directory:
-- `go/portainer/portainer-cli`
-- `go/nproxy/nproxy-cli`
-- `rust/portainer/portainer-cli`
-- `rust/nproxy/nproxy-cli`
+Binaries: `bin/portainer-cli`, `bin/nproxy-cli`
