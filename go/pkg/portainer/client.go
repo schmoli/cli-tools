@@ -1,6 +1,7 @@
 package portainer
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,12 +16,17 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func NewClient(url, token string) *Client {
+func NewClient(url, token string, insecure bool) *Client {
+	transport := &http.Transport{}
+	if insecure {
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
 	return &Client{
 		baseURL: strings.TrimSuffix(url, "/"),
 		token:   token,
 		httpClient: &http.Client{
-			Timeout: 10 * time.Second,
+			Timeout:   10 * time.Second,
+			Transport: transport,
 		},
 	}
 }

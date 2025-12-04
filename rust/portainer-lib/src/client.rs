@@ -11,11 +11,12 @@ pub struct PortainerClient {
 }
 
 impl PortainerClient {
-    pub fn new(url: &str, token: &str) -> Result<Self, PortainerError> {
+    pub fn new(url: &str, token: &str, insecure: bool) -> Result<Self, PortainerError> {
         let base_url = url.trim_end_matches('/').to_string();
 
         let client = Client::builder()
             .timeout(Duration::from_secs(10))
+            .danger_accept_invalid_certs(insecure)
             .build()
             .map_err(|e| PortainerError::NetworkError(e.to_string()))?;
 
