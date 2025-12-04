@@ -146,8 +146,8 @@ impl ApiEndpoint {
 
     pub fn status_label(&self) -> String {
         match self.status {
-            1 => "up".to_string(),
-            2 => "down".to_string(),
+            1 => "active".to_string(),
+            2 => "inactive".to_string(),
             _ => format!("unknown({})", self.status),
         }
     }

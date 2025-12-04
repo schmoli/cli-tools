@@ -129,9 +129,9 @@ func (e *APIEndpoint) TypeLabel() string {
 func (e *APIEndpoint) StatusLabel() string {
 	switch e.Status {
 	case 1:
-		return "up"
+		return "active"
 	case 2:
-		return "down"
+		return "inactive"
 	default:
 		return "unknown"
 	}
