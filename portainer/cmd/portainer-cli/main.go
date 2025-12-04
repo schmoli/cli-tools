@@ -9,6 +9,8 @@ import (
 	"github.com/schmoli/cli-tools/portainer/pkg/portainer"
 )
 
+var version = "dev"
+
 var (
 	flagURL      string
 	flagToken    string
@@ -18,7 +20,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:     "portainer-cli",
 	Short:   "CLI for Portainer API",
-	Version: "0.1.0",
+	Version: version,
 }
 
 func init() {

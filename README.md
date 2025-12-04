@@ -2,14 +2,13 @@
 
 CLI tools for various APIs.
 
-## Structure
+## Install
 
+```bash
+curl -fsSL https://raw.githubusercontent.com/schmoli/cli-tools/main/install.sh | bash
 ```
-cli-tools/
-├── common/         # Shared Go code
-├── portainer/      # portainer-cli
-└── nproxy/         # nproxy-cli
-```
+
+Installs `portainer-cli` and `nproxy-cli` to `~/.local/bin`.
 
 ## Tools
 
@@ -21,7 +20,7 @@ CLI for Portainer API. See [docs/portainer.md](docs/portainer.md).
 
 CLI for nginx-proxy-manager API. See [docs/nproxy.md](docs/nproxy.md).
 
-## Build
+## Development
 
 ```bash
 ./build.sh

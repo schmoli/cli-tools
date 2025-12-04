@@ -12,6 +12,8 @@ import (
 	"golang.org/x/term"
 )
 
+var version = "dev"
+
 var (
 	flagURL      string
 	flagToken    string
@@ -21,7 +23,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:     "nproxy-cli",
 	Short:   "CLI for nginx-proxy-manager API",
-	Version: "0.1.0",
+	Version: version,
 }
 
 var loginCmd = &cobra.Command{

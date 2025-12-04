@@ -4,6 +4,9 @@ set -e
 cd "$(dirname "$0")"
 mkdir -p bin
 
+VERSION="${VERSION:-dev}"
+LDFLAGS="-s -w -X main.version=${VERSION}"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -27,7 +30,7 @@ build_tool() {
     fi
 
     echo "Building..."
-    go build -o bin/${name} ./${dir}/cmd/${name}
+    go build -ldflags "${LDFLAGS}" -o bin/${name} ./${dir}/cmd/${name}
     SIZE=$(ls -lh bin/${name} | awk '{print $5}')
     echo -e "${GREEN}✓ Built${NC} (${SIZE})"
     echo ""
