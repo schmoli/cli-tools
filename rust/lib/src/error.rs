@@ -39,3 +39,26 @@ impl PortainerError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_exit_codes() {
+        assert_eq!(PortainerError::ConfigError("".into()).exit_code(), 1);
+        assert_eq!(PortainerError::AuthError("".into()).exit_code(), 2);
+        assert_eq!(PortainerError::NotFound("".into()).exit_code(), 3);
+        assert_eq!(PortainerError::NetworkError("".into()).exit_code(), 4);
+        assert_eq!(PortainerError::ApiError("".into()).exit_code(), 5);
+    }
+
+    #[test]
+    fn test_error_codes() {
+        assert_eq!(PortainerError::ConfigError("".into()).code(), "CONFIG_ERROR");
+        assert_eq!(PortainerError::AuthError("".into()).code(), "AUTH_FAILED");
+        assert_eq!(PortainerError::NotFound("".into()).code(), "NOT_FOUND");
+        assert_eq!(PortainerError::NetworkError("".into()).code(), "NETWORK_ERROR");
+        assert_eq!(PortainerError::ApiError("".into()).code(), "API_ERROR");
+    }
+}

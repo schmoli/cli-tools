@@ -162,3 +162,103 @@ impl ApiEndpoint {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_stack_type_label() {
+        let cases = [(1, "swarm"), (2, "compose"), (3, "kubernetes")];
+        for (type_code, expected) in cases {
+            let stack = ApiStack {
+                id: 1, name: "test".into(), stack_type: type_code,
+                status: 1, endpoint_id: 1, env: vec![],
+            };
+            assert_eq!(stack.stack_type_label(), expected);
+        }
+        // Unknown type
+        let stack = ApiStack {
+            id: 1, name: "test".into(), stack_type: 99,
+            status: 1, endpoint_id: 1, env: vec![],
+        };
+        assert_eq!(stack.stack_type_label(), "unknown(99)");
+    }
+
+    #[test]
+    fn test_stack_status_label() {
+        let cases = [(1, "active"), (2, "inactive")];
+        for (status, expected) in cases {
+            let stack = ApiStack {
+                id: 1, name: "test".into(), stack_type: 1,
+                status, endpoint_id: 1, env: vec![],
+            };
+            assert_eq!(stack.status_label(), expected);
+        }
+        let stack = ApiStack {
+            id: 1, name: "test".into(), stack_type: 1,
+            status: 99, endpoint_id: 1, env: vec![],
+        };
+        assert_eq!(stack.status_label(), "unknown(99)");
+    }
+
+    #[test]
+    fn test_endpoint_type_label() {
+        let cases = [
+            (1, "docker"), (2, "agent"), (3, "azure"),
+            (4, "edge-agent"), (5, "kubernetes"),
+        ];
+        for (type_code, expected) in cases {
+            let ep = ApiEndpoint {
+                id: 1, name: "test".into(), endpoint_type: type_code,
+                status: 1, url: "http://test".into(),
+            };
+            assert_eq!(ep.endpoint_type_label(), expected);
+        }
+        let ep = ApiEndpoint {
+            id: 1, name: "test".into(), endpoint_type: 99,
+            status: 1, url: "http://test".into(),
+        };
+        assert_eq!(ep.endpoint_type_label(), "unknown(99)");
+    }
+
+    #[test]
+    fn test_endpoint_status_label() {
+        let cases = [(1, "active"), (2, "inactive")];
+        for (status, expected) in cases {
+            let ep = ApiEndpoint {
+                id: 1, name: "test".into(), endpoint_type: 1,
+                status, url: "http://test".into(),
+            };
+            assert_eq!(ep.status_label(), expected);
+        }
+    }
+
+    #[test]
+    fn test_to_list_item() {
+        let stack = ApiStack {
+            id: 42, name: "mystack".into(), stack_type: 2,
+            status: 1, endpoint_id: 5, env: vec![],
+        };
+        let item = stack.to_list_item();
+        assert_eq!(item.id, 42);
+        assert_eq!(item.name, "mystack");
+        assert_eq!(item.stack_type, "compose");
+        assert_eq!(item.status, "active");
+        assert_eq!(item.endpoint_id, 5);
+    }
+
+    #[test]
+    fn test_to_endpoint() {
+        let ep = ApiEndpoint {
+            id: 10, name: "prod".into(), endpoint_type: 1,
+            status: 2, url: "tcp://docker:2375".into(),
+        };
+        let result = ep.to_endpoint();
+        assert_eq!(result.id, 10);
+        assert_eq!(result.name, "prod");
+        assert_eq!(result.endpoint_type, "docker");
+        assert_eq!(result.status, "inactive");
+        assert_eq!(result.url, "tcp://docker:2375");
+    }
+}

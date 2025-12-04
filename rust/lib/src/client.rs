@@ -11,12 +11,17 @@ pub struct PortainerClient {
 }
 
 impl PortainerClient {
-    pub fn new(url: &str, token: &str) -> Result<Self, PortainerError> {
+    pub fn new(url: &str, token: &str, insecure: bool) -> Result<Self, PortainerError> {
         let base_url = url.trim_end_matches('/').to_string();
 
-        let client = Client::builder()
-            .timeout(Duration::from_secs(10))
-            .danger_accept_invalid_certs(true)
+        let mut builder = Client::builder()
+            .timeout(Duration::from_secs(10));
+
+        if insecure {
+            builder = builder.danger_accept_invalid_certs(true);
+        }
+
+        let client = builder
             .build()
             .map_err(|e| PortainerError::NetworkError(e.to_string()))?;
 
@@ -71,5 +76,28 @@ impl PortainerClient {
 
     pub fn get_endpoint(&self, id: i64) -> Result<ApiEndpoint, PortainerError> {
         self.get(&format!("/api/endpoints/{}", id))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_url_trailing_slash_trimmed() {
+        let client = PortainerClient::new("http://example.com/", "token", false).unwrap();
+        assert_eq!(client.base_url, "http://example.com");
+    }
+
+    #[test]
+    fn test_client_creation_succeeds() {
+        let result = PortainerClient::new("http://example.com", "token", false);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_client_creation_with_insecure() {
+        let result = PortainerClient::new("http://example.com", "token", true);
+        assert!(result.is_ok());
     }
 }

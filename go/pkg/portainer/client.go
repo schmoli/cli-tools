@@ -16,9 +16,12 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func NewClient(url, token string) *Client {
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+func NewClient(url, token string, insecure bool) *Client {
+	var transport *http.Transport
+	if insecure {
+		transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
 	}
 	return &Client{
 		baseURL: strings.TrimSuffix(url, "/"),

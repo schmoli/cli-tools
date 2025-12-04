@@ -17,6 +17,10 @@ struct Cli {
     #[arg(long, global = true)]
     token: Option<String>,
 
+    /// Skip TLS certificate verification
+    #[arg(short = 'k', long, global = true)]
+    insecure: bool,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -76,7 +80,7 @@ fn get_config(cli: &Cli) -> Result<(String, String), PortainerError> {
 fn run() -> Result<(), PortainerError> {
     let cli = Cli::parse();
     let (url, token) = get_config(&cli)?;
-    let client = PortainerClient::new(&url, &token)?;
+    let client = PortainerClient::new(&url, &token, cli.insecure)?;
 
     match cli.command {
         Commands::Stacks { action } => match action {
