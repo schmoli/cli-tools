@@ -1,0 +1,13 @@
+[package]
+name = "nproxy-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "nproxy-cli"
+path = "src/main.rs"
+
+[dependencies]
+nproxy-lib = { path = "../lib" }
+clap = { version = "4.4", features = ["derive"] }
+rpassword = "7.3"

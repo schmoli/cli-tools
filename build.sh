@@ -26,9 +26,34 @@ fi
 
 echo "Building..."
 go build -o portainer-cli ./cmd/portainer-cli
-GO_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
-echo -e "${GREEN}✓ Built${NC} (${GO_SIZE})"
+GO_PORTAINER_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
+echo -e "${GREEN}✓ Built${NC} (${GO_PORTAINER_SIZE})"
 cd ../..
+
+# Go: nproxy (only if main.go exists)
+GO_NPROXY_SIZE=""
+if [ -f "go/nproxy/cmd/nproxy-cli/main.go" ]; then
+    echo ""
+    echo -e "${BLUE}=== Go: nproxy ===${NC}"
+    echo "Testing..."
+    cd go/nproxy
+    GO_TEST_OUTPUT=$(go test ./... -v 2>&1)
+    GO_TEST_EXIT=$?
+    if [ $GO_TEST_EXIT -eq 0 ]; then
+        GO_PASSED=$(echo "$GO_TEST_OUTPUT" | grep -c -- '--- PASS' || echo 0)
+        echo -e "${GREEN}✓ ${GO_PASSED} passed${NC}"
+    else
+        echo "$GO_TEST_OUTPUT" | grep -E '(FAIL|---\s*FAIL|panic:)'
+        echo -e "${RED}✗ Tests failed${NC}"
+        exit 1
+    fi
+
+    echo "Building..."
+    go build -o nproxy-cli ./cmd/nproxy-cli
+    GO_NPROXY_SIZE=$(ls -lh nproxy-cli | awk '{print $5}')
+    echo -e "${GREEN}✓ Built${NC} (${GO_NPROXY_SIZE})"
+    cd ../..
+fi
 
 echo ""
 echo -e "${BLUE}=== Rust: portainer ===${NC}"
@@ -48,12 +73,25 @@ fi
 echo "Building..."
 cargo build --release -p portainer-cli 2>&1 | grep -E '(Compiling|Finished|error)' | tail -5
 cp target/release/portainer-cli portainer/
-RUST_SIZE=$(ls -lh portainer/portainer-cli | awk '{print $5}')
-echo -e "${GREEN}✓ Built${NC} (${RUST_SIZE})"
+RUST_PORTAINER_SIZE=$(ls -lh portainer/portainer-cli | awk '{print $5}')
+echo -e "${GREEN}✓ Built${NC} (${RUST_PORTAINER_SIZE})"
+
+# Rust: nproxy (only if main.rs exists)
+RUST_NPROXY_SIZE=""
+if [ -f "nproxy/cli/src/main.rs" ]; then
+    echo ""
+    echo -e "${BLUE}=== Rust: nproxy ===${NC}"
+    cargo build --release -p nproxy-cli 2>&1 | grep -E '(Compiling|Finished|error)' | tail -5
+    cp target/release/nproxy-cli nproxy/
+    RUST_NPROXY_SIZE=$(ls -lh nproxy/nproxy-cli | awk '{print $5}')
+    echo -e "${GREEN}✓ Built${NC} (${RUST_NPROXY_SIZE})"
+fi
 cd ..
 
 echo ""
 echo -e "${BLUE}=== Summary ===${NC}"
-echo "  go/portainer/portainer-cli     ${GO_SIZE}"
-echo "  rust/portainer/portainer-cli   ${RUST_SIZE}"
+echo "  go/portainer/portainer-cli     ${GO_PORTAINER_SIZE}"
+[ -n "$GO_NPROXY_SIZE" ] && echo "  go/nproxy/nproxy-cli           ${GO_NPROXY_SIZE}"
+echo "  rust/portainer/portainer-cli   ${RUST_PORTAINER_SIZE}"
+[ -n "$RUST_NPROXY_SIZE" ] && echo "  rust/nproxy/nproxy-cli         ${RUST_NPROXY_SIZE}"
 echo -e "${GREEN}Done.${NC}"
