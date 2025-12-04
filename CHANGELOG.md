@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3](https://github.com/schmoli/cli-tools/compare/v0.1.2...v0.1.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* build binaries in release-please workflow when release created ([b7aa7a0](https://github.com/schmoli/cli-tools/commit/b7aa7a0a6bf5898d1b4b22c1820df3208e948ad5))
+
 ## [0.1.2](https://github.com/schmoli/cli-tools/compare/v0.1.1...v0.1.2) (2025-12-04)
 
 
