@@ -4,3 +4,10 @@
 *.swp
 *.swo
 *~
+
+# Local task tracking
+tasks/
+
+# Environment
+.env
+.env.*
