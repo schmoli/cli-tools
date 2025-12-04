@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/toli/portainer-cli/pkg/portainer"
 )
@@ -52,9 +50,9 @@ var endpointsShowCmd = &cobra.Command{
 			return
 		}
 
-		var id int64
-		if _, err := fmt.Sscanf(args[0], "%d", &id); err != nil {
-			handleError(portainer.ConfigError("invalid endpoint ID"))
+		id, err := parseID(args[0])
+		if err != nil {
+			handleError(err)
 			return
 		}
 

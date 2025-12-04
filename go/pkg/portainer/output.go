@@ -41,5 +41,7 @@ func PrintError(err error) {
 
 	enc := yaml.NewEncoder(os.Stderr)
 	enc.SetIndent(2)
-	enc.Encode(output)
+	if err := enc.Encode(output); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %s\n", pe.Message)
+	}
 }

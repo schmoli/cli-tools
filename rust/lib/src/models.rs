@@ -1,5 +1,14 @@
 use serde::{Deserialize, Serialize};
 
+// Helper function for status formatting
+fn format_status(status: i32) -> String {
+    match status {
+        1 => "active".to_string(),
+        2 => "inactive".to_string(),
+        _ => format!("unknown({})", status),
+    }
+}
+
 // Raw API response types
 #[derive(Debug, Deserialize)]
 pub struct ApiStack {
@@ -102,11 +111,7 @@ impl ApiStack {
     }
 
     pub fn status_label(&self) -> String {
-        match self.status {
-            1 => "active".to_string(),
-            2 => "inactive".to_string(),
-            _ => format!("unknown({})", self.status),
-        }
+        format_status(self.status)
     }
 
     pub fn to_list_item(&self) -> StackListItem {
@@ -145,11 +150,7 @@ impl ApiEndpoint {
     }
 
     pub fn status_label(&self) -> String {
-        match self.status {
-            1 => "active".to_string(),
-            2 => "inactive".to_string(),
-            _ => format!("unknown({})", self.status),
-        }
+        format_status(self.status)
     }
 
     pub fn to_endpoint(&self) -> Endpoint {

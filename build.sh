@@ -4,12 +4,56 @@ set -e
 # Source cargo if available
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
-echo "Building Go..."
-cd go && go build -o portainer-cli ./cmd/portainer-cli && cd ..
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-echo "Building Rust..."
-cd rust && cargo build --release && cp target/release/portainer-cli . && cd ..
+echo -e "${BLUE}=== Go ===${NC}"
+echo "Testing..."
+cd go
+GO_TEST_OUTPUT=$(go test ./... -v 2>&1)
+GO_TEST_EXIT=$?
+if [ $GO_TEST_EXIT -eq 0 ]; then
+    GO_PASSED=$(echo "$GO_TEST_OUTPUT" | grep -c -- '--- PASS')
+    echo -e "${GREEN}✓ ${GO_PASSED} passed${NC}"
+else
+    echo "$GO_TEST_OUTPUT" | grep -E '(FAIL|---\s*FAIL|panic:)'
+    echo -e "${RED}✗ Tests failed${NC}"
+    exit 1
+fi
 
-echo "Done."
-echo "  go/portainer-cli"
-echo "  rust/portainer-cli"
+echo "Building..."
+go build -o portainer-cli ./cmd/portainer-cli
+GO_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
+echo -e "${GREEN}✓ Built${NC} (${GO_SIZE})"
+cd ..
+
+echo ""
+echo -e "${BLUE}=== Rust ===${NC}"
+echo "Testing..."
+cd rust
+RUST_TEST_OUTPUT=$(cargo test 2>&1)
+RUST_TEST_EXIT=$?
+if [ $RUST_TEST_EXIT -eq 0 ]; then
+    RUST_PASSED=$(echo "$RUST_TEST_OUTPUT" | grep -o '[0-9]* passed' | awk '{sum+=$1} END {print sum}')
+    echo -e "${GREEN}✓ ${RUST_PASSED} passed${NC}"
+else
+    echo "$RUST_TEST_OUTPUT" | grep -E '(FAILED|panicked|error\[)'
+    echo -e "${RED}✗ Tests failed${NC}"
+    exit 1
+fi
+
+echo "Building..."
+cargo build --release 2>&1 | grep -E '(Compiling|Finished|error)' | tail -5
+cp target/release/portainer-cli .
+RUST_SIZE=$(ls -lh portainer-cli | awk '{print $5}')
+echo -e "${GREEN}✓ Built${NC} (${RUST_SIZE})"
+cd ..
+
+echo ""
+echo -e "${BLUE}=== Summary ===${NC}"
+echo "  go/portainer-cli     ${GO_SIZE}"
+echo "  rust/portainer-cli   ${RUST_SIZE}"
+echo -e "${GREEN}Done.${NC}"

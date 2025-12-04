@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -51,20 +50,16 @@ func (c *Client) get(path string, result interface{}) error {
 
 	switch resp.StatusCode {
 	case http.StatusOK:
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return NetworkError(err.Error())
-		}
-		if err := json.Unmarshal(body, result); err != nil {
-			return APIError(fmt.Sprintf("failed to parse response: %s", err))
+		if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
+			return APIError(fmt.Sprintf("failed to parse response from %s: %s", path, err))
 		}
 		return nil
 	case http.StatusUnauthorized, http.StatusForbidden:
-		return AuthError("invalid or expired token")
+		return AuthError(fmt.Sprintf("invalid or expired token for %s", path))
 	case http.StatusNotFound:
 		return NotFoundError(fmt.Sprintf("resource not found: %s", path))
 	default:
-		return APIError(fmt.Sprintf("unexpected status: %d", resp.StatusCode))
+		return APIError(fmt.Sprintf("unexpected status %d from %s", resp.StatusCode, path))
 	}
 }
 

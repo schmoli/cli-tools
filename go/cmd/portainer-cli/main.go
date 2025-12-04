@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/toli/portainer-cli/pkg/portainer"
@@ -28,6 +30,17 @@ func init() {
 	rootCmd.AddCommand(endpointsCmd)
 }
 
+func parseID(arg string) (int64, error) {
+	var id int64
+	if _, err := fmt.Sscanf(arg, "%d", &id); err != nil {
+		return 0, portainer.ConfigError(fmt.Sprintf("invalid ID: %s", arg))
+	}
+	if id <= 0 {
+		return 0, portainer.ConfigError("ID must be positive")
+	}
+	return id, nil
+}
+
 func getConfig() (string, string, error) {
 	url := flagURL
 	if url == "" {
@@ -43,6 +56,10 @@ func getConfig() (string, string, error) {
 	}
 	if token == "" {
 		return "", "", portainer.ConfigError("missing token. Use --token or set PORTAINER_TOKEN")
+	}
+
+	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+		return "", "", portainer.ConfigError("URL must start with http:// or https://")
 	}
 
 	return url, token, nil

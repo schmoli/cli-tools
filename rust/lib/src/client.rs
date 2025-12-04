@@ -14,6 +14,10 @@ impl PortainerClient {
     pub fn new(url: &str, token: &str, insecure: bool) -> Result<Self, PortainerError> {
         let base_url = url.trim_end_matches('/').to_string();
 
+        if !base_url.starts_with("http://") && !base_url.starts_with("https://") {
+            return Err(PortainerError::ConfigError("URL must start with http:// or https://".to_string()));
+        }
+
         let mut builder = Client::builder()
             .timeout(Duration::from_secs(10));
 
@@ -44,7 +48,7 @@ impl PortainerClient {
         match response.status() {
             StatusCode::OK => {
                 response.json::<T>()
-                    .map_err(|e| PortainerError::ApiError(format!("Failed to parse response: {}", e)))
+                    .map_err(|e| PortainerError::ApiError(format!("Failed to parse response from {}: {}", path, e)))
             }
             StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => {
                 Err(PortainerError::AuthError("Invalid or expired token".to_string()))
@@ -53,17 +57,13 @@ impl PortainerClient {
                 Err(PortainerError::NotFound(format!("Resource not found: {}", path)))
             }
             status => {
-                Err(PortainerError::ApiError(format!("Unexpected status: {}", status)))
+                Err(PortainerError::ApiError(format!("Unexpected status {} from {}", status, path)))
             }
         }
     }
 
     pub fn list_stacks(&self) -> Result<Vec<ApiStack>, PortainerError> {
         self.get("/api/stacks")
-    }
-
-    pub fn get_stack(&self, id: i64, endpoint_id: i64) -> Result<ApiStack, PortainerError> {
-        self.get(&format!("/api/stacks/{}?endpointId={}", id, endpoint_id))
     }
 
     pub fn get_stack_file(&self, id: i64) -> Result<ApiStackFile, PortainerError> {

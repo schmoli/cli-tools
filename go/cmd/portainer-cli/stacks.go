@@ -52,9 +52,9 @@ var stacksShowCmd = &cobra.Command{
 			return
 		}
 
-		var id int64
-		if _, err := fmt.Sscanf(args[0], "%d", &id); err != nil {
-			handleError(portainer.ConfigError("invalid stack ID"))
+		id, err := parseID(args[0])
+		if err != nil {
+			handleError(err)
 			return
 		}
 
@@ -66,9 +66,9 @@ var stacksShowCmd = &cobra.Command{
 		}
 
 		var apiStack *portainer.APIStack
-		for _, s := range stacks {
-			if s.ID == id {
-				apiStack = &s
+		for i := range stacks {
+			if stacks[i].ID == id {
+				apiStack = &stacks[i]
 				break
 			}
 		}

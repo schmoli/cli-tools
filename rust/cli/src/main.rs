@@ -92,6 +92,9 @@ fn run() -> Result<(), PortainerError> {
                 print_yaml(&output)?;
             }
             StacksAction::Show { id } => {
+                if id <= 0 {
+                    return Err(PortainerError::ConfigError("ID must be positive".to_string()));
+                }
                 // First get stack list to find endpoint_id
                 let stacks = client.list_stacks()?;
                 let api_stack = stacks.iter()
@@ -113,6 +116,9 @@ fn run() -> Result<(), PortainerError> {
                 print_yaml(&output)?;
             }
             EndpointsAction::Show { id } => {
+                if id <= 0 {
+                    return Err(PortainerError::ConfigError("ID must be positive".to_string()));
+                }
                 let endpoint = client.get_endpoint(id)?;
                 print_yaml(&endpoint.to_endpoint())?;
             }
