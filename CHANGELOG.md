@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4](https://github.com/schmoli/cli-tools/compare/v0.1.3...v0.1.4) (2025-12-04)
+
+
+### Features
+
+* build downloadable artifacts on main push for pre-release testing ([4a1c973](https://github.com/schmoli/cli-tools/commit/4a1c97356d5c7d93958b05fd86396499f77a1404))
+
 ## [0.1.3](https://github.com/schmoli/cli-tools/compare/v0.1.2...v0.1.3) (2025-12-04)
 
 
