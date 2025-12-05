@@ -71,3 +71,23 @@ if [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
     echo "Add to your PATH:"
     echo "  export PATH=\"${INSTALL_DIR}:\${PATH}\""
 fi
+
+# Shell completions
+echo ""
+echo "Shell completions (optional):"
+SHELL_NAME=$(basename "$SHELL")
+case "$SHELL_NAME" in
+    bash)
+        echo "  Add to ~/.bashrc:"
+        echo "    source <(portainer-cli completion bash)"
+        echo "    source <(nproxy-cli completion bash)"
+        ;;
+    zsh)
+        echo "  Add to ~/.zshrc:"
+        echo "    source <(portainer-cli completion zsh)"
+        echo "    source <(nproxy-cli completion zsh)"
+        ;;
+    *)
+        echo "  Run: portainer-cli completion --help"
+        ;;
+esac
