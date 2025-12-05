@@ -22,6 +22,9 @@ jobs:
       - name: Test nproxy-cli
         run: go test -v ./nproxy/...
 
+      - name: Test trans-cli
+        run: go test -v ./trans/...
+
   build:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -57,7 +60,8 @@ jobs:
           LDFLAGS="-s -w -X main.version=dev-${GITHUB_SHA::7}"
           go build -ldflags "${LDFLAGS}" -o portainer-cli ./portainer/cmd/portainer-cli
           go build -ldflags "${LDFLAGS}" -o nproxy-cli ./nproxy/cmd/nproxy-cli
-          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli
+          go build -ldflags "${LDFLAGS}" -o trans-cli ./trans/cmd/trans-cli
+          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli trans-cli
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
