@@ -59,9 +59,7 @@ error:
 
 Exit codes: 1=config, 2=auth, 3=not found, 4=network, 5=api error
 
-## Shell Completion (Go only)
-
-The Go implementation supports shell completion via Cobra.
+## Shell Completion
 
 ### Bash
 
