@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5](https://github.com/schmoli/cli-tools/compare/v0.1.4...v0.1.5) (2025-12-05)
+
+
+### Features
+
+* add trans-cli for Transmission RPC ([#9](https://github.com/schmoli/cli-tools/issues/9)) ([b99561a](https://github.com/schmoli/cli-tools/commit/b99561af8bba85c18c32051a8b832385d138ffb9))
+
 ## [0.1.4](https://github.com/schmoli/cli-tools/compare/v0.1.3...v0.1.4) (2025-12-04)
 
 
