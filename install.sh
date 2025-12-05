@@ -55,7 +55,8 @@ tar -xzf "${TMPDIR}/${TARBALL}" -C "${TMPDIR}"
 mkdir -p "${INSTALL_DIR}"
 mv "${TMPDIR}/portainer-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/nproxy-cli" "${INSTALL_DIR}/"
-chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli"
+mv "${TMPDIR}/trans-cli" "${INSTALL_DIR}/"
+chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli" "${INSTALL_DIR}/trans-cli"
 
 # Cleanup
 rm -rf "${TMPDIR}"
@@ -64,6 +65,7 @@ echo ""
 echo "Installed to ${INSTALL_DIR}:"
 echo "  - portainer-cli"
 echo "  - nproxy-cli"
+echo "  - trans-cli"
 
 # Check PATH
 if [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
@@ -81,11 +83,13 @@ case "$SHELL_NAME" in
         echo "  Add to ~/.bashrc:"
         echo "    source <(portainer-cli completion bash)"
         echo "    source <(nproxy-cli completion bash)"
+        echo "    source <(trans-cli completion bash)"
         ;;
     zsh)
         echo "  Add to ~/.zshrc:"
         echo "    source <(portainer-cli completion zsh)"
         echo "    source <(nproxy-cli completion zsh)"
+        echo "    source <(trans-cli completion zsh)"
         ;;
     *)
         echo "  Run: portainer-cli completion --help"
