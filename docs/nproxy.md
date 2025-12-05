@@ -2,15 +2,6 @@
 
 CLI tool for nginx-proxy-manager API - backup and viewing operations.
 
-## Installation
-
-Copy your preferred binary to your PATH:
-```bash
-cp go/nproxy/nproxy-cli /usr/local/bin/nproxy-cli
-# or
-cp rust/nproxy/nproxy-cli /usr/local/bin/nproxy-cli
-```
-
 ## Configuration
 
 Set credentials via environment variables (recommended):

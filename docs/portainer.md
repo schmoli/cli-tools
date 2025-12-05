@@ -2,15 +2,6 @@
 
 CLI tool for Portainer API - backup and viewing operations.
 
-## Installation
-
-Copy your preferred binary to your PATH:
-```bash
-cp go/portainer/portainer-cli /usr/local/bin/portainer-cli
-# or
-cp rust/portainer/portainer-cli /usr/local/bin/portainer-cli
-```
-
 ## Configuration
 
 Set credentials via environment variables (recommended):
