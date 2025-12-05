@@ -58,7 +58,8 @@ jobs:
           LDFLAGS="-s -w -X main.version=${VERSION}"
           go build -ldflags "${LDFLAGS}" -o portainer-cli ./portainer/cmd/portainer-cli
           go build -ldflags "${LDFLAGS}" -o nproxy-cli ./nproxy/cmd/nproxy-cli
-          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli
+          go build -ldflags "${LDFLAGS}" -o trans-cli ./trans/cmd/trans-cli
+          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli trans-cli
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
