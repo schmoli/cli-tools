@@ -2,15 +2,6 @@
 
 CLI tool for Portainer API - backup and viewing operations.
 
-## Installation
-
-Copy your preferred binary to your PATH:
-```bash
-cp go/portainer/portainer-cli /usr/local/bin/portainer-cli
-# or
-cp rust/portainer/portainer-cli /usr/local/bin/portainer-cli
-```
-
 ## Configuration
 
 Set credentials via environment variables (recommended):
@@ -68,9 +59,7 @@ error:
 
 Exit codes: 1=config, 2=auth, 3=not found, 4=network, 5=api error
 
-## Shell Completion (Go only)
-
-The Go implementation supports shell completion via Cobra.
+## Shell Completion
 
 ### Bash
 

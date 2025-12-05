@@ -1,6 +1,10 @@
 # cli-tools
 
-CLI tools for various APIs.
+[![Release](https://img.shields.io/github/v/release/schmoli/cli-tools)](https://github.com/schmoli/cli-tools/releases)
+[![License](https://img.shields.io/github/license/schmoli/cli-tools)](LICENSE)
+[![Build](https://img.shields.io/github/actions/workflow/status/schmoli/cli-tools/release-please.yml?branch=main)](https://github.com/schmoli/cli-tools/actions)
+
+> CLI tools for Portainer and nginx-proxy-manager APIs
 
 ## Install
 
@@ -8,22 +12,23 @@ CLI tools for various APIs.
 curl -fsSL https://raw.githubusercontent.com/schmoli/cli-tools/main/install.sh | bash
 ```
 
-Installs `portainer-cli` and `nproxy-cli` to `~/.local/bin`.
+Installs to `~/.local/bin`.
 
 ## Tools
 
-### portainer-cli
+| Tool | Description |
+|------|-------------|
+| [portainer-cli](docs/portainer.md) | Portainer API - stacks, endpoints |
+| [nproxy-cli](docs/nproxy.md) | nginx-proxy-manager API - hosts, certs |
 
-CLI for Portainer API. See [docs/portainer.md](docs/portainer.md).
+## Uninstall
 
-### nproxy-cli
-
-CLI for nginx-proxy-manager API. See [docs/nproxy.md](docs/nproxy.md).
+```bash
+rm ~/.local/bin/{portainer-cli,nproxy-cli}
+```
 
 ## Development
 
 ```bash
 ./build.sh
 ```
-
-Binaries: `bin/portainer-cli`, `bin/nproxy-cli`
