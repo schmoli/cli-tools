@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6](https://github.com/schmoli/cli-tools/compare/v0.1.5...v0.1.6) (2025-12-05)
+
+
+### Bug Fixes
+
+* add trans-cli to CI and release workflows ([#11](https://github.com/schmoli/cli-tools/issues/11)) ([bbd80bb](https://github.com/schmoli/cli-tools/commit/bbd80bb61607d159d88ea653b7239fb59e9c7bfd))
+
 ## [0.1.5](https://github.com/schmoli/cli-tools/compare/v0.1.4...v0.1.5) (2025-12-05)
 
 
