@@ -42,4 +42,8 @@ if [ -f "nproxy/cmd/nproxy-cli/main.go" ]; then
     build_tool "nproxy-cli" "nproxy"
 fi
 
+if [ -f "trans/cmd/trans-cli/main.go" ]; then
+    build_tool "trans-cli" "trans"
+fi
+
 echo -e "${GREEN}Done.${NC}"

@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/schmoli/cli-tools)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/schmoli/cli-tools/release-please.yml?branch=main)](https://github.com/schmoli/cli-tools/actions)
 
-> CLI tools for Portainer and nginx-proxy-manager APIs
+> CLI tools for Portainer, nginx-proxy-manager, and Transmission APIs
 
 ## Install
 
@@ -22,6 +22,9 @@ Installs to `~/.local/bin`.
 | `PORTAINER_TOKEN` | portainer-cli | Portainer API token |
 | `NPROXY_URL` | nproxy-cli | nginx-proxy-manager URL |
 | `NPROXY_TOKEN` | nproxy-cli | nginx-proxy-manager JWT |
+| `TRANSMISSION_URL` | trans-cli | Transmission RPC URL |
+| `TRANSMISSION_USER` | trans-cli | Transmission username (optional) |
+| `TRANSMISSION_PASS` | trans-cli | Transmission password (optional) |
 
 ### Common Flags
 
@@ -91,6 +94,43 @@ nproxy-cli certs list  # alias
 nproxy-cli certificates show 1
 ```
 
+## trans-cli
+
+### List Torrents
+
+```bash
+# List all torrents
+trans-cli list
+
+# Filter by status
+trans-cli downloading
+trans-cli seeding
+trans-cli stopped
+```
+
+### Show Torrent Details
+
+```bash
+trans-cli show 1
+```
+
+### Add Torrents
+
+```bash
+# Add magnet link
+trans-cli add "magnet:?xt=urn:btih:..."
+
+# Add .torrent file
+trans-cli add /path/to/file.torrent
+```
+
+### Control Torrents
+
+```bash
+trans-cli start 1
+trans-cli stop 1
+```
+
 ## Output Format
 
 All output is YAML. Errors go to stderr:
@@ -111,6 +151,7 @@ Exit codes: 1=config, 2=auth, 3=not found, 4=network, 5=api error
 # Add to ~/.bashrc
 source <(portainer-cli completion bash)
 source <(nproxy-cli completion bash)
+source <(trans-cli completion bash)
 ```
 
 ### Zsh
@@ -119,6 +160,7 @@ source <(nproxy-cli completion bash)
 # Add to ~/.zshrc
 source <(portainer-cli completion zsh)
 source <(nproxy-cli completion zsh)
+source <(trans-cli completion zsh)
 ```
 
 If you get "command not found: compdef", add before the source lines:
@@ -129,5 +171,5 @@ autoload -Uz compinit && compinit
 ## Uninstall
 
 ```bash
-rm ~/.local/bin/{portainer-cli,nproxy-cli}
+rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli}
 ```
