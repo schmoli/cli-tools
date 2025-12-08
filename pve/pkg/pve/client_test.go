@@ -83,3 +83,53 @@ func TestClientListGuests(t *testing.T) {
 		t.Errorf("guest 1: got vmid=%d type=%s, want vmid=101 type=lxc", guests[1].VMID, guests[1].Type)
 	}
 }
+
+func TestClientStartGuest(t *testing.T) {
+	var startedPath string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api2/json/nodes":
+			w.Write([]byte(`{"data":[{"node":"pve","status":"online"}]}`))
+		case "/api2/json/nodes/pve/qemu/100/status/start":
+			startedPath = r.URL.Path
+			w.Write([]byte(`{"data":"UPID:pve:00001234:00000000:12345678:qmstart:100:user@pam:"}`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "user@pam!token", "secret", false)
+	err := client.StartGuest(100, "qemu")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if startedPath == "" {
+		t.Error("start endpoint was not called")
+	}
+}
+
+func TestClientStopGuest(t *testing.T) {
+	var stoppedPath string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api2/json/nodes":
+			w.Write([]byte(`{"data":[{"node":"pve","status":"online"}]}`))
+		case "/api2/json/nodes/pve/lxc/101/status/shutdown":
+			stoppedPath = r.URL.Path
+			w.Write([]byte(`{"data":"UPID:pve:00001234:00000000:12345678:vzshutdown:101:user@pam:"}`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "user@pam!token", "secret", false)
+	err := client.StopGuest(101, "lxc")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if stoppedPath == "" {
+		t.Error("stop endpoint was not called")
+	}
+}

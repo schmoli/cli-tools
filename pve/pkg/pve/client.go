@@ -192,3 +192,54 @@ func (c *Client) getLXCIP(node string, vmid int64) string {
 	}
 	return "N/A"
 }
+
+func (c *Client) StartGuest(vmid int64, vmType string) error {
+	node, err := c.GetNode()
+	if err != nil {
+		return err
+	}
+
+	path := fmt.Sprintf("/api2/json/nodes/%s/%s/%d/status/start", node, vmType, vmid)
+	var resp APITaskResponse
+	return c.post(path, &resp)
+}
+
+func (c *Client) StopGuest(vmid int64, vmType string) error {
+	node, err := c.GetNode()
+	if err != nil {
+		return err
+	}
+
+	path := fmt.Sprintf("/api2/json/nodes/%s/%s/%d/status/shutdown", node, vmType, vmid)
+	var resp APITaskResponse
+	return c.post(path, &resp)
+}
+
+func (c *Client) FindGuestType(vmid int64) (string, string, error) {
+	node, err := c.GetNode()
+	if err != nil {
+		return "", "", err
+	}
+
+	// Try QEMU first
+	var vmResp APIVMListResponse
+	if err := c.get(fmt.Sprintf("/api2/json/nodes/%s/qemu", node), &vmResp); err == nil {
+		for _, vm := range vmResp.Data {
+			if vm.VMID == vmid {
+				return "qemu", vm.Name, nil
+			}
+		}
+	}
+
+	// Try LXC
+	var lxcResp APIVMListResponse
+	if err := c.get(fmt.Sprintf("/api2/json/nodes/%s/lxc", node), &lxcResp); err == nil {
+		for _, lxc := range lxcResp.Data {
+			if lxc.VMID == vmid {
+				return "lxc", lxc.Name, nil
+			}
+		}
+	}
+
+	return "", "", NotFoundError(fmt.Sprintf("guest %d not found", vmid))
+}
