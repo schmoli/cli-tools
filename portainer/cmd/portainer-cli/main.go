@@ -30,6 +30,7 @@ func init() {
 
 	rootCmd.AddCommand(stacksCmd)
 	rootCmd.AddCommand(endpointsCmd)
+	rootCmd.AddCommand(containersCmd)
 }
 
 func parseID(arg string) (int64, error) {
