@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7](https://github.com/schmoli/cli-tools/compare/v0.1.6...v0.1.7) (2025-12-08)
+
+
+### Features
+
+* add pve-cli for Proxmox VE ([#13](https://github.com/schmoli/cli-tools/issues/13)) ([f47a5db](https://github.com/schmoli/cli-tools/commit/f47a5db5650bf7116b1bdbc2091ecba6a46c704d))
+* **portainer:** add container listing commands ([#15](https://github.com/schmoli/cli-tools/issues/15)) ([a0089c2](https://github.com/schmoli/cli-tools/commit/a0089c2e3b7f199c570dc3ad35d55b7b2abbd304))
+
 ## [0.1.6](https://github.com/schmoli/cli-tools/compare/v0.1.5...v0.1.6) (2025-12-05)
 
 
