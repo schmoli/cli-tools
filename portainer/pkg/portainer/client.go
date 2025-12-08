@@ -104,3 +104,12 @@ func (c *Client) GetEndpoint(id int64) (*APIEndpoint, error) {
 	}
 	return &endpoint, nil
 }
+
+func (c *Client) ListContainers(endpointID int64) ([]APIContainer, error) {
+	var containers []APIContainer
+	path := fmt.Sprintf("/api/endpoints/%d/docker/containers/json?all=true", endpointID)
+	if err := c.get(path, &containers); err != nil {
+		return nil, err
+	}
+	return containers, nil
+}

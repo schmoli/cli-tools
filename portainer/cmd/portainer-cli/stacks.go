@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/spf13/cobra"
 	"github.com/schmoli/cli-tools/portainer/pkg/portainer"
@@ -91,7 +92,71 @@ var stacksShowCmd = &cobra.Command{
 	},
 }
 
+var stacksContainersCmd = &cobra.Command{
+	Use:   "containers <stack-id>",
+	Short: "List containers for a stack",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		client, err := getClient()
+		if err != nil {
+			handleError(err)
+			return
+		}
+
+		id, err := parseID(args[0])
+		if err != nil {
+			handleError(err)
+			return
+		}
+
+		// Get stack to find endpoint and name
+		stacks, err := client.ListStacks()
+		if err != nil {
+			handleError(err)
+			return
+		}
+
+		var apiStack *portainer.APIStack
+		for i := range stacks {
+			if stacks[i].ID == id {
+				apiStack = &stacks[i]
+				break
+			}
+		}
+		if apiStack == nil {
+			handleError(portainer.NotFoundError(fmt.Sprintf("stack with ID %d", id)))
+			return
+		}
+
+		// Get containers for that endpoint
+		containers, err := client.ListContainers(apiStack.EndpointID)
+		if err != nil {
+			handleError(err)
+			return
+		}
+
+		// Filter by stack name
+		var output portainer.ContainerList
+		for _, c := range containers {
+			item := c.ToListItem(apiStack.EndpointID)
+			if item.Stack == apiStack.Name {
+				output = append(output, item)
+			}
+		}
+
+		// Sort by name
+		sort.Slice(output, func(i, j int) bool {
+			return output[i].Name < output[j].Name
+		})
+
+		if err := portainer.PrintYAML(output); err != nil {
+			handleError(err)
+		}
+	},
+}
+
 func init() {
 	stacksCmd.AddCommand(stacksListCmd)
 	stacksCmd.AddCommand(stacksShowCmd)
+	stacksCmd.AddCommand(stacksContainersCmd)
 }
