@@ -4,5 +4,6 @@ use (
 	./common
 	./nproxy
 	./portainer
+	./pve
 	./trans
 )

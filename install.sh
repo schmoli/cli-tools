@@ -56,7 +56,8 @@ mkdir -p "${INSTALL_DIR}"
 mv "${TMPDIR}/portainer-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/nproxy-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/trans-cli" "${INSTALL_DIR}/"
-chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli" "${INSTALL_DIR}/trans-cli"
+mv "${TMPDIR}/pve-cli" "${INSTALL_DIR}/"
+chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli" "${INSTALL_DIR}/trans-cli" "${INSTALL_DIR}/pve-cli"
 
 # Cleanup
 rm -rf "${TMPDIR}"
@@ -66,6 +67,7 @@ echo "Installed to ${INSTALL_DIR}:"
 echo "  - portainer-cli"
 echo "  - nproxy-cli"
 echo "  - trans-cli"
+echo "  - pve-cli"
 
 # Check PATH
 if [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
@@ -84,12 +86,14 @@ case "$SHELL_NAME" in
         echo "    source <(portainer-cli completion bash)"
         echo "    source <(nproxy-cli completion bash)"
         echo "    source <(trans-cli completion bash)"
+        echo "    source <(pve-cli completion bash)"
         ;;
     zsh)
         echo "  Add to ~/.zshrc:"
         echo "    source <(portainer-cli completion zsh)"
         echo "    source <(nproxy-cli completion zsh)"
         echo "    source <(trans-cli completion zsh)"
+        echo "    source <(pve-cli completion zsh)"
         ;;
     *)
         echo "  Run: portainer-cli completion --help"

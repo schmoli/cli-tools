@@ -46,4 +46,8 @@ if [ -f "trans/cmd/trans-cli/main.go" ]; then
     build_tool "trans-cli" "trans"
 fi
 
+if [ -f "pve/cmd/pve-cli/main.go" ]; then
+    build_tool "pve-cli" "pve"
+fi
+
 echo -e "${GREEN}Done.${NC}"
