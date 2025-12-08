@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/schmoli/cli-tools)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/schmoli/cli-tools/release-please.yml?branch=main)](https://github.com/schmoli/cli-tools/actions)
 
-> CLI tools for Portainer, nginx-proxy-manager, and Transmission APIs
+> CLI tools for Portainer, nginx-proxy-manager, Transmission, and Proxmox VE APIs
 
 ## Install
 
@@ -25,6 +25,9 @@ Installs to `~/.local/bin`.
 | `TRANSMISSION_URL` | trans-cli | Transmission RPC URL |
 | `TRANSMISSION_USER` | trans-cli | Transmission username (optional) |
 | `TRANSMISSION_PASS` | trans-cli | Transmission password (optional) |
+| `PVE_URL` | pve-cli | Proxmox VE URL |
+| `PVE_TOKEN_ID` | pve-cli | Proxmox API token ID (user@realm!tokenname) |
+| `PVE_TOKEN_SECRET` | pve-cli | Proxmox API token secret |
 
 ### Common Flags
 
@@ -131,6 +134,28 @@ trans-cli start 1
 trans-cli stop 1
 ```
 
+## pve-cli
+
+### List VMs and LXCs
+
+```bash
+pve-cli list
+```
+
+### Start Guest
+
+```bash
+# Start VM or LXC by ID
+pve-cli start 100
+```
+
+### Stop Guest
+
+```bash
+# Stop VM or LXC by ID
+pve-cli stop 100
+```
+
 ## Output Format
 
 All output is YAML. Errors go to stderr:
@@ -152,6 +177,7 @@ Exit codes: 1=config, 2=auth, 3=not found, 4=network, 5=api error
 source <(portainer-cli completion bash)
 source <(nproxy-cli completion bash)
 source <(trans-cli completion bash)
+source <(pve-cli completion bash)
 ```
 
 ### Zsh
@@ -161,6 +187,7 @@ source <(trans-cli completion bash)
 source <(portainer-cli completion zsh)
 source <(nproxy-cli completion zsh)
 source <(trans-cli completion zsh)
+source <(pve-cli completion zsh)
 ```
 
 If you get "command not found: compdef", add before the source lines:
@@ -171,5 +198,5 @@ autoload -Uz compinit && compinit
 ## Uninstall
 
 ```bash
-rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli}
+rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli}
 ```
