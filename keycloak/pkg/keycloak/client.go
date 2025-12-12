@@ -196,3 +196,74 @@ func (c *Client) GetUserSessions(realm, userID string) (*SessionList, error) {
 	}
 	return list, nil
 }
+
+type ClientInfo struct {
+	ID          string `yaml:"id"`
+	ClientID    string `yaml:"client_id"`
+	Name        string `yaml:"name,omitempty"`
+	Description string `yaml:"description,omitempty"`
+	Enabled     bool   `yaml:"enabled"`
+	Protocol    string `yaml:"protocol,omitempty"`
+}
+
+type ClientList struct {
+	Clients []ClientInfo `yaml:"clients"`
+}
+
+func (c *Client) ListClients(realm string) (*ClientList, error) {
+	clients, err := c.gocloak.GetClients(c.ctx, c.token, realm, gocloak.GetClientsParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &ClientList{Clients: make([]ClientInfo, len(clients))}
+	for i, cl := range clients {
+		list.Clients[i] = ClientInfo{
+			ID:          deref(cl.ID),
+			ClientID:    deref(cl.ClientID),
+			Name:        deref(cl.Name),
+			Description: deref(cl.Description),
+			Enabled:     derefBool(cl.Enabled),
+			Protocol:    deref(cl.Protocol),
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetClient(realm, clientID string) (*ClientInfo, error) {
+	clients, err := c.gocloak.GetClients(c.ctx, c.token, realm, gocloak.GetClientsParams{ClientID: &clientID})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+	if len(clients) == 0 {
+		return nil, NotFoundError("client not found: " + clientID)
+	}
+	cl := clients[0]
+	return &ClientInfo{
+		ID:          deref(cl.ID),
+		ClientID:    deref(cl.ClientID),
+		Name:        deref(cl.Name),
+		Description: deref(cl.Description),
+		Enabled:     derefBool(cl.Enabled),
+		Protocol:    deref(cl.Protocol),
+	}, nil
+}
+
+func (c *Client) GetClientSessions(realm, clientUUID string) (*SessionList, error) {
+	sessions, err := c.gocloak.GetClientUserSessions(c.ctx, c.token, realm, clientUUID, gocloak.GetClientUserSessionsParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &SessionList{Sessions: make([]SessionInfo, len(sessions))}
+	for i, s := range sessions {
+		list.Sessions[i] = SessionInfo{
+			ID:         deref(s.ID),
+			Username:   deref(s.Username),
+			IPAddress:  deref(s.IPAddress),
+			Started:    derefInt64(s.Start),
+			LastAccess: derefInt64(s.LastAccess),
+		}
+	}
+	return list, nil
+}

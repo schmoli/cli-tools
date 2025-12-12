@@ -35,6 +35,7 @@ func init() {
 
 	rootCmd.AddCommand(realmsCmd)
 	rootCmd.AddCommand(usersCmd)
+	rootCmd.AddCommand(clientsCmd)
 }
 
 func envOrFlag(flag, env string) string {
