@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/schmoli/cli-tools)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/schmoli/cli-tools/release-please.yml?branch=main)](https://github.com/schmoli/cli-tools/actions)
 
-> CLI tools for Portainer, nginx-proxy-manager, Transmission, and Proxmox VE APIs
+> CLI tools for Portainer, nginx-proxy-manager, Transmission, Proxmox VE, and Keycloak APIs
 
 ## Install
 
@@ -28,6 +28,11 @@ Installs to `~/.local/bin`.
 | `PVE_URL` | pve-cli | Proxmox VE URL |
 | `PVE_TOKEN_ID` | pve-cli | Proxmox API token ID (user@realm!tokenname) |
 | `PVE_TOKEN_SECRET` | pve-cli | Proxmox API token secret |
+| `KEYCLOAK_URL` | keycloak-cli | Keycloak server URL |
+| `KEYCLOAK_REALM` | keycloak-cli | Auth realm (usually "master") |
+| `KEYCLOAK_CLIENT_ID` | keycloak-cli | Service account client ID |
+| `KEYCLOAK_CLIENT_SECRET` | keycloak-cli | Service account client secret |
+| `KEYCLOAK_TARGET_REALM` | keycloak-cli | Target realm for queries |
 
 ### Common Flags
 
@@ -156,6 +161,70 @@ pve-cli start 100
 pve-cli stop 100
 ```
 
+## keycloak-cli
+
+### Realms
+
+```bash
+# List all realms
+keycloak-cli realms list
+
+# Show realm details
+keycloak-cli realms get master
+```
+
+### Users
+
+```bash
+# List users in a realm
+keycloak-cli users list --target-realm myrealm
+
+# Show user details
+keycloak-cli users get <user-id> --target-realm myrealm
+
+# Show user sessions
+keycloak-cli users sessions <user-id> --target-realm myrealm
+```
+
+### Clients
+
+```bash
+# List clients
+keycloak-cli clients list --target-realm myrealm
+
+# Show client details
+keycloak-cli clients get <client-id> --target-realm myrealm
+
+# Show client sessions
+keycloak-cli clients sessions <client-uuid> --target-realm myrealm
+```
+
+### Roles
+
+```bash
+# List realm roles
+keycloak-cli roles list --target-realm myrealm
+
+# List client roles
+keycloak-cli roles list --target-realm myrealm --client <client-uuid>
+
+# Show role details
+keycloak-cli roles get admin --target-realm myrealm
+```
+
+### Groups
+
+```bash
+# List groups
+keycloak-cli groups list --target-realm myrealm
+
+# Show group details
+keycloak-cli groups get <group-id> --target-realm myrealm
+
+# List group members
+keycloak-cli groups members <group-id> --target-realm myrealm
+```
+
 ## Output Format
 
 All output is YAML. Errors go to stderr:
@@ -178,6 +247,7 @@ source <(portainer-cli completion bash)
 source <(nproxy-cli completion bash)
 source <(trans-cli completion bash)
 source <(pve-cli completion bash)
+source <(keycloak-cli completion bash)
 ```
 
 ### Zsh
@@ -188,6 +258,7 @@ source <(portainer-cli completion zsh)
 source <(nproxy-cli completion zsh)
 source <(trans-cli completion zsh)
 source <(pve-cli completion zsh)
+source <(keycloak-cli completion zsh)
 ```
 
 If you get "command not found: compdef", add before the source lines:
@@ -198,5 +269,5 @@ autoload -Uz compinit && compinit
 ## Uninstall
 
 ```bash
-rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli}
+rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli,keycloak-cli}
 ```
