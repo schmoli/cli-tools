@@ -54,3 +54,59 @@ func NewClient(cfg Config) (*Client, error) {
 		ctx:     ctx,
 	}, nil
 }
+
+type RealmInfo struct {
+	ID          string `yaml:"id"`
+	Realm       string `yaml:"realm"`
+	DisplayName string `yaml:"display_name,omitempty"`
+	Enabled     bool   `yaml:"enabled"`
+}
+
+type RealmList struct {
+	Realms []RealmInfo `yaml:"realms"`
+}
+
+func (c *Client) ListRealms() (*RealmList, error) {
+	realms, err := c.gocloak.GetRealms(c.ctx, c.token)
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &RealmList{Realms: make([]RealmInfo, len(realms))}
+	for i, r := range realms {
+		list.Realms[i] = RealmInfo{
+			ID:          deref(r.ID),
+			Realm:       deref(r.Realm),
+			DisplayName: deref(r.DisplayName),
+			Enabled:     derefBool(r.Enabled),
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetRealm(name string) (*RealmInfo, error) {
+	r, err := c.gocloak.GetRealm(c.ctx, c.token, name)
+	if err != nil {
+		return nil, NotFoundError(err.Error())
+	}
+	return &RealmInfo{
+		ID:          deref(r.ID),
+		Realm:       deref(r.Realm),
+		DisplayName: deref(r.DisplayName),
+		Enabled:     derefBool(r.Enabled),
+	}, nil
+}
+
+func deref(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
+func derefBool(b *bool) bool {
+	if b == nil {
+		return false
+	}
+	return *b
+}
