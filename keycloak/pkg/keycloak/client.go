@@ -110,3 +110,89 @@ func derefBool(b *bool) bool {
 	}
 	return *b
 }
+
+func derefInt64(i *int64) int64 {
+	if i == nil {
+		return 0
+	}
+	return *i
+}
+
+type UserInfo struct {
+	ID        string `yaml:"id"`
+	Username  string `yaml:"username"`
+	Email     string `yaml:"email,omitempty"`
+	FirstName string `yaml:"first_name,omitempty"`
+	LastName  string `yaml:"last_name,omitempty"`
+	Enabled   bool   `yaml:"enabled"`
+}
+
+type UserList struct {
+	Users []UserInfo `yaml:"users"`
+}
+
+type SessionInfo struct {
+	ID         string `yaml:"id"`
+	Username   string `yaml:"username"`
+	IPAddress  string `yaml:"ip_address,omitempty"`
+	Started    int64  `yaml:"started,omitempty"`
+	LastAccess int64  `yaml:"last_access,omitempty"`
+}
+
+type SessionList struct {
+	Sessions []SessionInfo `yaml:"sessions"`
+}
+
+func (c *Client) ListUsers(realm string) (*UserList, error) {
+	users, err := c.gocloak.GetUsers(c.ctx, c.token, realm, gocloak.GetUsersParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &UserList{Users: make([]UserInfo, len(users))}
+	for i, u := range users {
+		list.Users[i] = UserInfo{
+			ID:        deref(u.ID),
+			Username:  deref(u.Username),
+			Email:     deref(u.Email),
+			FirstName: deref(u.FirstName),
+			LastName:  deref(u.LastName),
+			Enabled:   derefBool(u.Enabled),
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetUser(realm, userID string) (*UserInfo, error) {
+	u, err := c.gocloak.GetUserByID(c.ctx, c.token, realm, userID)
+	if err != nil {
+		return nil, NotFoundError(err.Error())
+	}
+	return &UserInfo{
+		ID:        deref(u.ID),
+		Username:  deref(u.Username),
+		Email:     deref(u.Email),
+		FirstName: deref(u.FirstName),
+		LastName:  deref(u.LastName),
+		Enabled:   derefBool(u.Enabled),
+	}, nil
+}
+
+func (c *Client) GetUserSessions(realm, userID string) (*SessionList, error) {
+	sessions, err := c.gocloak.GetUserSessions(c.ctx, c.token, realm, userID)
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &SessionList{Sessions: make([]SessionInfo, len(sessions))}
+	for i, s := range sessions {
+		list.Sessions[i] = SessionInfo{
+			ID:         deref(s.ID),
+			Username:   deref(s.Username),
+			IPAddress:  deref(s.IPAddress),
+			Started:    derefInt64(s.Start),
+			LastAccess: derefInt64(s.LastAccess),
+		}
+	}
+	return list, nil
+}

@@ -34,6 +34,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&flagTargetRealm, "target-realm", "", "Target realm for queries (or KEYCLOAK_TARGET_REALM)")
 
 	rootCmd.AddCommand(realmsCmd)
+	rootCmd.AddCommand(usersCmd)
 }
 
 func envOrFlag(flag, env string) string {
