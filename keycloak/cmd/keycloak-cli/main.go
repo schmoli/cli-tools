@@ -37,6 +37,7 @@ func init() {
 	rootCmd.AddCommand(usersCmd)
 	rootCmd.AddCommand(clientsCmd)
 	rootCmd.AddCommand(rolesCmd)
+	rootCmd.AddCommand(groupsCmd)
 }
 
 func envOrFlag(flag, env string) string {

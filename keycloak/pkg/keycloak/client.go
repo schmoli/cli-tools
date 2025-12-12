@@ -345,3 +345,81 @@ func (c *Client) GetClientRole(realm, clientUUID, roleName string) (*RoleInfo, e
 		ClientRole:  derefBool(r.ClientRole),
 	}, nil
 }
+
+type GroupInfo struct {
+	ID        string   `yaml:"id"`
+	Name      string   `yaml:"name"`
+	Path      string   `yaml:"path"`
+	SubGroups []string `yaml:"subgroups,omitempty"`
+}
+
+type GroupList struct {
+	Groups []GroupInfo `yaml:"groups"`
+}
+
+type MemberList struct {
+	Members []UserInfo `yaml:"members"`
+}
+
+func (c *Client) ListGroups(realm string) (*GroupList, error) {
+	groups, err := c.gocloak.GetGroups(c.ctx, c.token, realm, gocloak.GetGroupsParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &GroupList{Groups: make([]GroupInfo, len(groups))}
+	for i, g := range groups {
+		var subs []string
+		if g.SubGroups != nil {
+			for _, sg := range *g.SubGroups {
+				subs = append(subs, deref(sg.Name))
+			}
+		}
+		list.Groups[i] = GroupInfo{
+			ID:        deref(g.ID),
+			Name:      deref(g.Name),
+			Path:      deref(g.Path),
+			SubGroups: subs,
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetGroup(realm, groupID string) (*GroupInfo, error) {
+	g, err := c.gocloak.GetGroup(c.ctx, c.token, realm, groupID)
+	if err != nil {
+		return nil, NotFoundError(err.Error())
+	}
+	var subs []string
+	if g.SubGroups != nil {
+		for _, sg := range *g.SubGroups {
+			subs = append(subs, deref(sg.Name))
+		}
+	}
+	return &GroupInfo{
+		ID:        deref(g.ID),
+		Name:      deref(g.Name),
+		Path:      deref(g.Path),
+		SubGroups: subs,
+	}, nil
+}
+
+func (c *Client) GetGroupMembers(realm, groupID string) (*MemberList, error) {
+	members, err := c.gocloak.GetGroupMembers(c.ctx, c.token, realm, groupID, gocloak.GetGroupsParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &MemberList{Members: make([]UserInfo, len(members))}
+	for i, u := range members {
+		list.Members[i] = UserInfo{
+			ID:        deref(u.ID),
+			Username:  deref(u.Username),
+			Email:     deref(u.Email),
+			FirstName: deref(u.FirstName),
+			LastName:  deref(u.LastName),
+			Enabled:   derefBool(u.Enabled),
+		}
+	}
+	return list, nil
+}
