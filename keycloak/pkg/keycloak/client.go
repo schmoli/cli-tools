@@ -267,3 +267,81 @@ func (c *Client) GetClientSessions(realm, clientUUID string) (*SessionList, erro
 	}
 	return list, nil
 }
+
+type RoleInfo struct {
+	ID          string `yaml:"id"`
+	Name        string `yaml:"name"`
+	Description string `yaml:"description,omitempty"`
+	Composite   bool   `yaml:"composite"`
+	ClientRole  bool   `yaml:"client_role"`
+}
+
+type RoleList struct {
+	Roles []RoleInfo `yaml:"roles"`
+}
+
+func (c *Client) ListRealmRoles(realm string) (*RoleList, error) {
+	roles, err := c.gocloak.GetRealmRoles(c.ctx, c.token, realm, gocloak.GetRoleParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &RoleList{Roles: make([]RoleInfo, len(roles))}
+	for i, r := range roles {
+		list.Roles[i] = RoleInfo{
+			ID:          deref(r.ID),
+			Name:        deref(r.Name),
+			Description: deref(r.Description),
+			Composite:   derefBool(r.Composite),
+			ClientRole:  derefBool(r.ClientRole),
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetRealmRole(realm, roleName string) (*RoleInfo, error) {
+	r, err := c.gocloak.GetRealmRole(c.ctx, c.token, realm, roleName)
+	if err != nil {
+		return nil, NotFoundError(err.Error())
+	}
+	return &RoleInfo{
+		ID:          deref(r.ID),
+		Name:        deref(r.Name),
+		Description: deref(r.Description),
+		Composite:   derefBool(r.Composite),
+		ClientRole:  derefBool(r.ClientRole),
+	}, nil
+}
+
+func (c *Client) ListClientRoles(realm, clientUUID string) (*RoleList, error) {
+	roles, err := c.gocloak.GetClientRoles(c.ctx, c.token, realm, clientUUID, gocloak.GetRoleParams{})
+	if err != nil {
+		return nil, APIError(err.Error())
+	}
+
+	list := &RoleList{Roles: make([]RoleInfo, len(roles))}
+	for i, r := range roles {
+		list.Roles[i] = RoleInfo{
+			ID:          deref(r.ID),
+			Name:        deref(r.Name),
+			Description: deref(r.Description),
+			Composite:   derefBool(r.Composite),
+			ClientRole:  derefBool(r.ClientRole),
+		}
+	}
+	return list, nil
+}
+
+func (c *Client) GetClientRole(realm, clientUUID, roleName string) (*RoleInfo, error) {
+	r, err := c.gocloak.GetClientRole(c.ctx, c.token, realm, clientUUID, roleName)
+	if err != nil {
+		return nil, NotFoundError(err.Error())
+	}
+	return &RoleInfo{
+		ID:          deref(r.ID),
+		Name:        deref(r.Name),
+		Description: deref(r.Description),
+		Composite:   derefBool(r.Composite),
+		ClientRole:  derefBool(r.ClientRole),
+	}, nil
+}
