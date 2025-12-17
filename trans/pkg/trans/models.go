@@ -32,8 +32,9 @@ type TorrentActionArgs struct {
 }
 
 type TorrentAddArgs struct {
-	Filename string `json:"filename,omitempty"` // magnet URI
-	Metainfo string `json:"metainfo,omitempty"` // base64 torrent file
+	Filename string   `json:"filename,omitempty"` // magnet URI
+	Metainfo string   `json:"metainfo,omitempty"` // base64 torrent file
+	Labels   []string `json:"labels,omitempty"`
 }
 
 type TorrentAddResponse struct {

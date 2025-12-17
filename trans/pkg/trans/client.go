@@ -183,6 +183,7 @@ func (c *Client) AddTorrentMagnet(magnet string) (*TorrentAddedInfo, error) {
 		Method: "torrent-add",
 		Arguments: TorrentAddArgs{
 			Filename: magnet,
+			Labels:   []string{"cli"},
 		},
 	}
 
@@ -210,6 +211,7 @@ func (c *Client) AddTorrentFile(path string) (*TorrentAddedInfo, error) {
 		Method: "torrent-add",
 		Arguments: TorrentAddArgs{
 			Metainfo: base64.StdEncoding.EncodeToString(data),
+			Labels:   []string{"cli"},
 		},
 	}
 
