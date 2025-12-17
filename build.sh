@@ -50,4 +50,8 @@ if [ -f "pve/cmd/pve-cli/main.go" ]; then
     build_tool "pve-cli" "pve"
 fi
 
+if [ -f "keycloak/cmd/keycloak-cli/main.go" ]; then
+    build_tool "keycloak-cli" "keycloak"
+fi
+
 echo -e "${GREEN}Done.${NC}"

@@ -57,7 +57,8 @@ mv "${TMPDIR}/portainer-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/nproxy-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/trans-cli" "${INSTALL_DIR}/"
 mv "${TMPDIR}/pve-cli" "${INSTALL_DIR}/"
-chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli" "${INSTALL_DIR}/trans-cli" "${INSTALL_DIR}/pve-cli"
+mv "${TMPDIR}/keycloak-cli" "${INSTALL_DIR}/"
+chmod +x "${INSTALL_DIR}/portainer-cli" "${INSTALL_DIR}/nproxy-cli" "${INSTALL_DIR}/trans-cli" "${INSTALL_DIR}/pve-cli" "${INSTALL_DIR}/keycloak-cli"
 
 # Cleanup
 rm -rf "${TMPDIR}"
@@ -68,6 +69,7 @@ echo "  - portainer-cli"
 echo "  - nproxy-cli"
 echo "  - trans-cli"
 echo "  - pve-cli"
+echo "  - keycloak-cli"
 
 # Check PATH
 if [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
@@ -87,6 +89,7 @@ case "$SHELL_NAME" in
         echo "    source <(nproxy-cli completion bash)"
         echo "    source <(trans-cli completion bash)"
         echo "    source <(pve-cli completion bash)"
+        echo "    source <(keycloak-cli completion bash)"
         ;;
     zsh)
         echo "  Add to ~/.zshrc:"
@@ -94,6 +97,7 @@ case "$SHELL_NAME" in
         echo "    source <(nproxy-cli completion zsh)"
         echo "    source <(trans-cli completion zsh)"
         echo "    source <(pve-cli completion zsh)"
+        echo "    source <(keycloak-cli completion zsh)"
         ;;
     *)
         echo "  Run: portainer-cli completion --help"
