@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.8](https://github.com/schmoli/cli-tools/compare/v0.1.7...v0.1.8) (2025-12-17)
+
+
+### Features
+
+* **trans:** auto-tag added torrents with 'cli' label ([#18](https://github.com/schmoli/cli-tools/issues/18)) ([294e89d](https://github.com/schmoli/cli-tools/commit/294e89dd4eedbb6dbff82b22e35bc874af85cb7b))
+
 ## [0.1.7](https://github.com/schmoli/cli-tools/compare/v0.1.6...v0.1.7) (2025-12-08)
 
 
