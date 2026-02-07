@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10](https://github.com/schmoli/cli-tools/compare/v0.1.9...v0.1.10) (2026-02-07)
+
+
+### Features
+
+* add sonarr-cli and radarr-cli ([#22](https://github.com/schmoli/cli-tools/issues/22)) ([928dec5](https://github.com/schmoli/cli-tools/commit/928dec576a134dfbfe2e701ac73e791dd5857ce8))
+
 ## [0.1.9](https://github.com/schmoli/cli-tools/compare/v0.1.8...v0.1.9) (2026-02-07)
 
 
