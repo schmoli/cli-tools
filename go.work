@@ -6,5 +6,7 @@ use (
 	./nproxy
 	./portainer
 	./pve
+	./radarr
+	./sonarr
 	./trans
 )
