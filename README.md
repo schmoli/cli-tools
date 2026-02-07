@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/schmoli/cli-tools)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/schmoli/cli-tools/release-please.yml?branch=main)](https://github.com/schmoli/cli-tools/actions)
 
-> CLI tools for Portainer, nginx-proxy-manager, Transmission, and Proxmox VE APIs
+> CLI tools for Portainer, nginx-proxy-manager, Transmission, Proxmox VE, and Audiobookshelf APIs
 
 ## Install
 
@@ -28,6 +28,8 @@ Installs to `~/.local/bin`.
 | `PVE_URL` | pve-cli | Proxmox VE URL |
 | `PVE_TOKEN_ID` | pve-cli | Proxmox API token ID (user@realm!tokenname) |
 | `PVE_TOKEN_SECRET` | pve-cli | Proxmox API token secret |
+| `ABS_URL` | abs-cli | Audiobookshelf URL |
+| `ABS_TOKEN` | abs-cli | Audiobookshelf API token |
 
 ### Common Flags
 
@@ -156,6 +158,56 @@ pve-cli start 100
 pve-cli stop 100
 ```
 
+## abs-cli
+
+### Libraries
+
+```bash
+# List all libraries
+abs-cli libraries list
+```
+
+### Books
+
+```bash
+# List audiobooks (uses first library by default)
+abs-cli books list
+abs-cli books list --library <id> --limit 100
+
+# Show audiobook details
+abs-cli books show <id>
+```
+
+### Progress
+
+```bash
+# Show listening progress (continue listening)
+abs-cli progress
+```
+
+### Search
+
+```bash
+# Search audiobooks
+abs-cli search "primal hunter"
+abs-cli search --library <id> "author name"
+```
+
+### Scan
+
+```bash
+# Trigger library scan
+abs-cli scan                    # scan all libraries
+abs-cli scan --library <id>     # scan specific library
+```
+
+### Getting Your API Token
+
+1. Log into Audiobookshelf web UI as admin
+2. Go to Settings → Users
+3. Click on your account
+4. Copy the API token
+
 ## Output Format
 
 All output is YAML. Errors go to stderr:
@@ -178,6 +230,7 @@ source <(portainer-cli completion bash)
 source <(nproxy-cli completion bash)
 source <(trans-cli completion bash)
 source <(pve-cli completion bash)
+source <(abs-cli completion bash)
 ```
 
 ### Zsh
@@ -188,6 +241,7 @@ source <(portainer-cli completion zsh)
 source <(nproxy-cli completion zsh)
 source <(trans-cli completion zsh)
 source <(pve-cli completion zsh)
+source <(abs-cli completion zsh)
 ```
 
 If you get "command not found: compdef", add before the source lines:
@@ -198,5 +252,5 @@ autoload -Uz compinit && compinit
 ## Uninstall
 
 ```bash
-rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli}
+rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli,abs-cli}
 ```

@@ -50,4 +50,8 @@ if [ -f "pve/cmd/pve-cli/main.go" ]; then
     build_tool "pve-cli" "pve"
 fi
 
+if [ -f "abs/cmd/abs-cli/main.go" ]; then
+    build_tool "abs-cli" "abs"
+fi
+
 echo -e "${GREEN}Done.${NC}"
