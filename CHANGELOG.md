@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.9](https://github.com/schmoli/cli-tools/compare/v0.1.8...v0.1.9) (2026-02-07)
+
+
+### Features
+
+* add abs-cli for Audiobookshelf ([#20](https://github.com/schmoli/cli-tools/issues/20)) ([d1e4a46](https://github.com/schmoli/cli-tools/commit/d1e4a467209363ebc0590142effa5f4293507ed0))
+
 ## [0.1.8](https://github.com/schmoli/cli-tools/compare/v0.1.7...v0.1.8) (2025-12-17)
 
 
