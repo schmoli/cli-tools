@@ -61,7 +61,9 @@ jobs:
           go build -ldflags "${LDFLAGS}" -o trans-cli ./trans/cmd/trans-cli
           go build -ldflags "${LDFLAGS}" -o pve-cli ./pve/cmd/pve-cli
           go build -ldflags "${LDFLAGS}" -o abs-cli ./abs/cmd/abs-cli
-          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli trans-cli pve-cli abs-cli
+          go build -ldflags "${LDFLAGS}" -o sonarr-cli ./sonarr/cmd/sonarr-cli
+          go build -ldflags "${LDFLAGS}" -o radarr-cli ./radarr/cmd/radarr-cli
+          tar -czvf cli-tools-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz portainer-cli nproxy-cli trans-cli pve-cli abs-cli sonarr-cli radarr-cli
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1

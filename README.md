@@ -30,6 +30,10 @@ Installs to `~/.local/bin`.
 | `PVE_TOKEN_SECRET` | pve-cli | Proxmox API token secret |
 | `ABS_URL` | abs-cli | Audiobookshelf URL |
 | `ABS_TOKEN` | abs-cli | Audiobookshelf API token |
+| `SONARR_URL` | sonarr-cli | Sonarr URL |
+| `SONARR_API_KEY` | sonarr-cli | Sonarr API key |
+| `RADARR_URL` | radarr-cli | Radarr URL |
+| `RADARR_API_KEY` | radarr-cli | Radarr API key |
 
 ### Common Flags
 
@@ -208,6 +212,90 @@ abs-cli scan --library <id>     # scan specific library
 3. Click on your account
 4. Copy the API token
 
+## sonarr-cli
+
+### Series
+
+```bash
+# List all series
+sonarr-cli series list
+
+# Show series details
+sonarr-cli series show <id>
+```
+
+### Calendar
+
+```bash
+# Show upcoming episodes (default: 7 days)
+sonarr-cli calendar
+sonarr-cli calendar --days 14
+```
+
+### Queue
+
+```bash
+# Show download queue
+sonarr-cli queue
+```
+
+### Wanted
+
+```bash
+# Show missing episodes
+sonarr-cli wanted
+sonarr-cli wanted --limit 50
+```
+
+### Search
+
+```bash
+# Search for new series
+sonarr-cli search "breaking bad"
+```
+
+## radarr-cli
+
+### Movies
+
+```bash
+# List all movies
+radarr-cli movies list
+
+# Show movie details
+radarr-cli movies show <id>
+```
+
+### Calendar
+
+```bash
+# Show upcoming releases (default: 30 days)
+radarr-cli calendar
+radarr-cli calendar --days 60
+```
+
+### Queue
+
+```bash
+# Show download queue
+radarr-cli queue
+```
+
+### Wanted
+
+```bash
+# Show missing movies
+radarr-cli wanted
+radarr-cli wanted --limit 50
+```
+
+### Search
+
+```bash
+# Search for new movies
+radarr-cli search "dune"
+```
+
 ## Output Format
 
 All output is YAML. Errors go to stderr:
@@ -231,6 +319,8 @@ source <(nproxy-cli completion bash)
 source <(trans-cli completion bash)
 source <(pve-cli completion bash)
 source <(abs-cli completion bash)
+source <(sonarr-cli completion bash)
+source <(radarr-cli completion bash)
 ```
 
 ### Zsh
@@ -242,6 +332,8 @@ source <(nproxy-cli completion zsh)
 source <(trans-cli completion zsh)
 source <(pve-cli completion zsh)
 source <(abs-cli completion zsh)
+source <(sonarr-cli completion zsh)
+source <(radarr-cli completion zsh)
 ```
 
 If you get "command not found: compdef", add before the source lines:
@@ -252,5 +344,5 @@ autoload -Uz compinit && compinit
 ## Uninstall
 
 ```bash
-rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli,abs-cli}
+rm ~/.local/bin/{portainer-cli,nproxy-cli,trans-cli,pve-cli,abs-cli,sonarr-cli,radarr-cli}
 ```

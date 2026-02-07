@@ -54,4 +54,12 @@ if [ -f "abs/cmd/abs-cli/main.go" ]; then
     build_tool "abs-cli" "abs"
 fi
 
+if [ -f "sonarr/cmd/sonarr-cli/main.go" ]; then
+    build_tool "sonarr-cli" "sonarr"
+fi
+
+if [ -f "radarr/cmd/radarr-cli/main.go" ]; then
+    build_tool "radarr-cli" "radarr"
+fi
+
 echo -e "${GREEN}Done.${NC}"
