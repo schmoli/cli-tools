@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11](https://github.com/schmoli/cli-tools/compare/v0.1.10...v0.1.11) (2026-02-18)
+
+
+### Features
+
+* add direnv config for dev environment ([#24](https://github.com/schmoli/cli-tools/issues/24)) ([d0de1ef](https://github.com/schmoli/cli-tools/commit/d0de1ef43837d14a2b397561d3fad0657c8736f9))
+
 ## [0.1.10](https://github.com/schmoli/cli-tools/compare/v0.1.9...v0.1.10) (2026-02-07)
 
 
